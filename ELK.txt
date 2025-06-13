@@ -1,0 +1,63 @@
+What is the ELK Stack?
+The ELK stack is an acronym used to describe a stack that comprises three popular projects: Elasticsearch, Logstash, and Kibana. Often referred to as Elasticsearch, the ELK stack gives you the ability to aggregate logs from all your systems and applications, analyze these logs, and create visualizations for application and infrastructure monitoring, faster troubleshooting, security analytics, and more.
+
+E = Elasticsearch
+Elasticsearch is a distributed search and analytics engine built on Apache Lucene. Support for various languages, high performance, and schema-free JSON documents makes Elasticsearch an ideal choice for various log analytics and search use cases. 
+
+For more information, see What is Elasticsearch?
+
+On January 21, 2021, Elastic NV announced that they would change their software licensing strategy and not release new versions of Elasticsearch and Kibana under the permissive Apache License, Version 2.0 (ALv2) license. Instead, new versions of the software will be offered under the Elastic license, with source code available under the Elastic License or SSPL. These licenses are not open source and do not offer users the same freedoms. For a secure, high-quality, fully open-source search and analytics suite, you can use the OpenSearch project, a community-driven, ALv2 licensed fork of open-source Elasticsearch and Kibana.
+
+L = Logstash
+Logstash is an open-source data ingestion tool that allows you to collect data from various sources, transform it, and send it to your desired destination. With prebuilt filters and support for over 200 plugins, Logstash allows users to easily ingest data regardless of the data source or type. 
+
+Logstash is a lightweight, open-source, server-side data processing pipeline that allows you to collect data from various sources, transform it on the fly, and send it to your desired destination. It is most often used as a data pipeline for Elasticsearch, an open-source analytics and search engine. Because of its tight integration with Elasticsearch, powerful log processing capabilities, and over 200 prebuilt open-source plugins that can help you easily index your data, Logstash is a popular choice for loading data into Elasticsearch.
+
+Easily load unstructured data
+Logstash allows you to easily ingest unstructured data from various data sources including system logs, website logs, and application server logs. 
+
+Prebuilt filters
+Logstash offers prebuilt filters, so you can readily transform common data types, index them in Elasticsearch, and start querying without having to build custom data transformation pipelines.
+
+Flexible plugin architecture
+With over 200 plugins already available on GitHub, it is likely that someone has already built the plugin that you need to customize your data pipeline. But if one is not available that suits your requirements, you can easily create one yourself.
+
+K = Kibana
+Kibana is a data visualization and exploration tool used for log and time-series analytics, application monitoring, and operational intelligence use cases. It offers powerful and easy-to-use features such as histograms, line graphs, pie charts, heat maps, and built-in geospatial support. Also, it provides tight integration with Elasticsearch, a popular analytics and search engine, which makes Kibana the default choice for visualizing data stored in Elasticsearch.
+
+On January 21, 2021, Elastic NV announced that they would change their software licensing strategy and not release new versions of Elasticsearch and Kibana under the permissive Apache License, Version 2.0 (ALv2) license. Instead, new versions of the software will be offered under the Elastic license, with source code available under the Elastic License or SSPL. These licenses are not open source and do not offer users the same freedoms. To ensure that the open source community and our customers continue to have a secure, high-quality, fully open source search and analytics suite, we introduced the OpenSearch project, a community-driven, ALv2 licensed fork of open source Elasticsearch and Kibana. The OpenSearch suite consists of a search engine, OpenSearch, and a visualization and user interface, OpenSearch Dashboards.
+
+You can run Kibana on premises, on Amazon Elastic Compute Cloud (Amazon EC2), or on Apache 2.0 licensed versions (up to version 7.10.2) of Amazon OpenSearch Service. OpenSearch Dashboards is an open-source alternative to Kibana, which is also available to self-manage. It was derived from the last open-source version of Kibana (7.10.2). It contains many advancements and is well supported through the OpenSearch Project. With on-premises or Amazon EC2 deployments, you are responsible for provisioning the infrastructure, installing Kibana or OpenSearch Dashboards software, and managing the infrastructure. With OpenSearch Service, Kibana or OpenSearch Dashboards are deployed automatically with your domain as a fully managed service, automatically taking care of all the heavy lifting to manage the cluster.
+
+Interactive charts
+Kibana offers intuitive charts and reports that you can use to interactively navigate through large amounts of log data. You can dynamically drag time windows, zoom in and out of specific data subsets, and drill down on reports to extract actionable insights from your data.
+
+Mapping support
+Kibana comes with powerful geospatial capabilities, so you can seamlessly layer in geographical information on top of your data and visualize results on maps.
+
+Prebuilt aggregations and filters
+Using Kibana’s prebuilt aggregations and filters, you can run various analytics like histograms, top-N queries, and trends in just a few steps.
+
+Easily accessible dashboards
+You can easily set up dashboards and reports and share them with others. All you need is a browser to view and explore the data.
+
+How does the ELK stack work?
+Logstash ingests, transforms, and sends the data to the right destination.
+Elasticsearch indexes, analyzes, and searches the ingested data.
+Kibana visualizes the results of the analysis.
+What does the ELK stack do?
+The ELK stack is used to solve a wide range of problems, including log analytics, document search, security information and event management (SIEM), and observability. It provides the search and analytics engine, data ingestion, and visualization.
+
+Why is the ELK stack important?
+The ELK stack fulfills a need in the log analytics space. As more and more of your IT infrastructure moves to public clouds, you need a log management and analytics solution to monitor this infrastructure and process any server logs, application logs, and clickstreams. The ELK stack provides a simple yet robust log analysis solution for your developers and DevOps engineers to gain valuable insights on failure diagnosis, application performance, and infrastructure monitoring—at a fraction of the price.
+
+How can I choose the right solution for the ELK stack?
+At AWS, you can choose to deploy and manage the ELK stack yourself on EC2. But, scaling up and down to meet your business requirements or achieving security and compliance is a challenge with the self-managed option. If you prefer that your developers or DevOps engineers spend their time building innovative applications or managing operational tasks such as deployment, upgrades, software installation and patching, backups, and monitoring, OpenSearch Service is a fully managed open-source alternative that makes it easier to deploy, operate, and scale OpenSearch clusters securely and cost-effectively on AWS.
+
+Which AWS offerings support your ELK stack?
+OpenSearch Service supports several versions of Apache 2.0-licensed Elasticsearch (versions 1.5 to 7.10), and Kibana (versions 1.5 to 7.10). OpenSearch Service also supports integration with Logstash to collect and transform data from your sources, and then it loads it to the service.
+
+What ingestion tools are offered by AWS?
+AWS has several data ingestion tools such as Amazon Data Firehose, Amazon CloudWatch Logs, and AWS IoT to give you the flexibility to select the data ingestion tool that meets your use case requirements. To learn more, see Amazon OpenSearch Service Integrations.
+
+OpenSearch includes certain Apache-licensed Elasticsearch code from Elasticsearch B.V. and other source code. Elasticsearch B.V. is not the source of that other source code. ELASTICSEARCH is a registered trademark of Elasticsearch B.V.

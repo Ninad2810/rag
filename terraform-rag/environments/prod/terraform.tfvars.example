@@ -1,0 +1,7 @@
+environment = "prod"
+region = "ap-south-1"
+account_id = "YOUR_AWS_ACCOUNT_ID"
+lambda_embed_source_file = "../../../lambda_embed.py"
+lambda_query_source_file = "../../../lambda_query.py"
+opensearch_master_user = "admin"
+opensearch_master_password = "Admin@123456"

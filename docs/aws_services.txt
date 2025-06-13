@@ -1,0 +1,1 @@
+This is a test document about AWS services. Amazon S3 is a storage service. Amazon EC2 is a compute service. Amazon RDS is a database service.
