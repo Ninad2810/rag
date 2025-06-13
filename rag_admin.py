@@ -15,6 +15,10 @@ def upload_document(file_path, bucket_name):
    file_name = os.path.basename(file_path)
 
    try:
+       # Create the docs/ prefix if it doesn't exist
+       s3.put_object(Bucket=bucket_name, Key='docs/', Body='')
+       
+       # Upload the file to the docs/ prefix
        s3.upload_file(file_path, bucket_name, f"docs/{file_name}")
        print(f"Successfully uploaded {file_name} to s3://{bucket_name}/docs/")
        return True
@@ -27,6 +31,12 @@ def trigger_embedding(document_key, function_name):
    lambda_client = boto3.client('lambda')
 
    try:
+       # Ensure the key has the docs/ prefix
+       if not document_key.startswith('docs/'):
+           document_key = f"docs/{document_key}"
+           
+       print(f"Triggering Lambda function {function_name} for document {document_key}")
+       
        payload = {
            'key': document_key
        }
