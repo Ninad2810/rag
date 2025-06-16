@@ -1,17 +1,13 @@
-# Use the REST API ID passed from the root module
-# instead of creating a new REST API
+# Get the root resource ID
+data "aws_api_gateway_resource" "root_resource" {
+  rest_api_id = var.rest_api_id
+  path        = "/"
+}
 
 resource "aws_api_gateway_resource" "query_resource" {
   rest_api_id = var.rest_api_id
-  parent_id   = local.root_resource_id
+  parent_id   = data.aws_api_gateway_resource.root_resource.id
   path_part   = var.api_path
-}
-
-# Get the root resource ID using a local value
-locals {
-  # This is a workaround since we can't directly get the root resource ID
-  # We're using a known pattern for API Gateway root resource IDs
-  root_resource_id = "${var.rest_api_id}/resources/${var.rest_api_id}"
 }
 
 resource "aws_api_gateway_method" "query_method" {
@@ -40,22 +36,6 @@ resource "aws_api_gateway_method_response" "query_response_200" {
   response_parameters = {
     "method.response.header.Access-Control-Allow-Origin" = true
   }
-}
-
-# API Gateway module (create before Lambda to get the execution ARN)
-resource "aws_api_gateway_rest_api" "rag_api" {
-  name        = "${var.api_name_prefix}-${var.environment}"
-  description = "API Gateway for ${var.project_name}"
-  
-  endpoint_configuration {
-    types = ["REGIONAL"]
-  }
-  
-  tags = merge(var.common_tags, {
-    Name        = "${var.api_name_prefix}-${var.environment}"
-    Environment = var.environment
-    Project     = var.project_name
-  })
 }
 
 # CORS configuration
@@ -103,6 +83,7 @@ resource "aws_api_gateway_integration_response" "query_options_integration_respo
   }
 }
 
+# Create deployment without a stage name
 resource "aws_api_gateway_deployment" "rag_api_deployment" {
   depends_on = [
     aws_api_gateway_integration.query_integration,
@@ -110,7 +91,7 @@ resource "aws_api_gateway_deployment" "rag_api_deployment" {
   ]
 
   rest_api_id = var.rest_api_id
-  stage_name  = var.stage_name
+  # Remove stage_name to avoid conflicts with the dedicated stage resource
 
   lifecycle {
     create_before_destroy = true
@@ -122,14 +103,22 @@ resource "aws_api_gateway_deployment" "rag_api_deployment" {
   }
 }
 
+# Create a dedicated stage resource
+resource "aws_api_gateway_stage" "rag_api_stage" {
+  deployment_id = aws_api_gateway_deployment.rag_api_deployment.id
+  rest_api_id   = var.rest_api_id
+  stage_name    = var.stage_name
+}
+
 # API Gateway Usage Plan and API Key
 resource "aws_api_gateway_usage_plan" "rag_usage_plan" {
   name        = "rag-usage-plan-${var.environment}"
   description = "Usage plan for ${var.project_name} API"
 
+  # Reference the stage we created above
   api_stages {
     api_id = var.rest_api_id
-    stage  = aws_api_gateway_deployment.rag_api_deployment.stage_name
+    stage  = aws_api_gateway_stage.rag_api_stage.stage_name
   }
 
   quota_settings {
@@ -147,6 +136,9 @@ resource "aws_api_gateway_usage_plan" "rag_usage_plan" {
     Environment = var.environment
     Project     = var.project_name
   })
+
+  # Make sure the stage is created before the usage plan
+  depends_on = [aws_api_gateway_stage.rag_api_stage]
 }
 
 resource "aws_api_gateway_api_key" "rag_api_key" {

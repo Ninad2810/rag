@@ -28,136 +28,88 @@ variable "common_tags" {
 }
 
 # S3 Configuration
-variable "bucket_prefix" {
-  description = "Prefix for the S3 bucket name"
-  type        = string
-  default     = "rag-document-store"
-}
-
-variable "s3_notification_prefix" {
-  description = "Prefix for S3 notification filter"
-  type        = string
-  default     = "docs/"
-}
-
-variable "s3_notification_file_types" {
-  description = "List of file types to trigger Lambda on S3 upload"
-  type        = list(string)
-  default     = [".pdf", ".txt", ".md", ".docx"]
+variable "s3_conf" {
+  description = "S3 bucket configuration"
+  type = object({
+    bucket_prefix = string
+    s3_notification_prefix = string
+    s3_notification_file_types = list(string)
+  })
+  default = {
+    bucket_prefix = "rag-document-store"
+    s3_notification_prefix = "docs/"
+    s3_notification_file_types = [".pdf", ".txt", ".md", ".docx"]
+  }
 }
 
 # Lambda Configuration
-variable "lambda_embed_source_file" {
-  description = "Path to the Lambda embed source file"
-  type        = string
-  default     = "../lambda_embed.py"
+variable "lambda_conf" {
+  description = "Lambda function configuration"
+  type = object({
+    lambda_embed_source_file = string
+    lambda_query_source_file = string
+    lambda_embed_name_prefix = string
+    lambda_query_name_prefix = string
+    lambda_memory_size = number
+    lambda_timeout = number
+    lambda_runtime = string
+  })
+  default = {
+    lambda_embed_source_file = "../lambda_embed.py"
+    lambda_query_source_file = "../lambda_query.py"
+    lambda_embed_name_prefix = "rag-embed"
+    lambda_query_name_prefix = "rag-query"
+    lambda_memory_size = 1024
+    lambda_timeout = 300
+    lambda_runtime = "python3.9"
+  }
 }
 
-variable "lambda_query_source_file" {
-  description = "Path to the Lambda query source file"
-  type        = string
-  default     = "../lambda_query.py"
-}
-
-variable "lambda_embed_name_prefix" {
-  description = "Prefix for the Lambda embed function name"
-  type        = string
-  default     = "rag-embed"
-}
-
-variable "lambda_query_name_prefix" {
-  description = "Prefix for the Lambda query function name"
-  type        = string
-  default     = "rag-query"
-}
-
-variable "lambda_memory_size" {
-  description = "Memory size for Lambda functions in MB"
-  type        = number
-  default     = 1024
-}
-
-variable "lambda_timeout" {
-  description = "Timeout for Lambda functions in seconds"
-  type        = number
-  default     = 300
-}
-
-variable "lambda_runtime" {
-  description = "Runtime for Lambda functions"
-  type        = string
-  default     = "python3.9"
-}
-
-variable "embeddings_model" {
-  description = "Model to use for generating embeddings"
-  type        = string
-  default     = "sentence-transformers/all-MiniLM-L6-v2"
-}
-
-variable "query_model" {
-  description = "Model to use for query processing"
-  type        = string
-  default     = "gpt-3.5-turbo"
+# Model Configuration
+variable "ml_model_conf" {
+  description = "Machine learning model configuration"
+  type = object({
+    embeddings_model = string
+    query_model = string
+  })
+  default = {
+    embeddings_model = "sentence-transformers/all-MiniLM-L6-v2"
+    query_model = "gpt-3.5-turbo"
+  }
 }
 
 # OpenSearch Configuration
-variable "domain_name" {
-  description = "Name of the OpenSearch domain"
-  type        = string
-}
-
-variable "opensearch_domain_prefix" {
-  description = "Prefix for the OpenSearch domain name"
-  type        = string
-  default     = "rag-vector-store"
-}
-
-variable "opensearch_instance_type" {
-  description = "Instance type for OpenSearch"
-  type        = string
-  default     = "t3.small.search"
-}
-
-variable "opensearch_instance_count" {
-  description = "Number of instances for OpenSearch"
-  type        = number
-  default     = 1
-}
-
-variable "opensearch_volume_size" {
-  description = "Volume size for OpenSearch in GB"
-  type        = number
-  default     = 10
-}
-
-variable "opensearch_master_user" {
-  description = "Master user name for OpenSearch"
-  type        = string
-  default     = "admin"
-}
-
-variable "opensearch_master_password" {
-  description = "Master user password for OpenSearch"
-  type        = string
-  sensitive   = true
+variable "opensearch_conf" {
+  description = "OpenSearch configuration"
+  type = object({
+    opensearch_domain_prefix = string
+    opensearch_instance_type = string
+    opensearch_instance_count = number
+    opensearch_volume_size = number
+    opensearch_master_user = string
+    opensearch_master_password = string
+  })
+  default = {
+    opensearch_domain_prefix = "rag-vector-store"
+    opensearch_instance_type = "t3.small.search"
+    opensearch_instance_count = 1
+    opensearch_volume_size = 10
+    opensearch_master_user = "admin"
+    opensearch_master_password = "changeme"
+  }
 }
 
 # API Gateway Configuration
-variable "api_name_prefix" {
-  description = "Prefix for the API Gateway name"
-  type        = string
-  default     = "rag-api"
-}
-
-variable "api_stage_name" {
-  description = "Name of the API Gateway stage"
-  type        = string
-  default     = "dev"
-}
-
-variable "api_path" {
-  description = "Path part for the API Gateway resource"
-  type        = string
-  default     = "query"
+variable "api_conf" {
+  description = "API Gateway configuration"
+  type = object({
+    api_name_prefix = string
+    api_stage_name = string
+    api_path = string
+  })
+  default = {
+    api_name_prefix = "rag-api"
+    api_stage_name = "dev"
+    api_path = "query"
+  }
 }

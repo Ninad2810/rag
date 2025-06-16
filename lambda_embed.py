@@ -10,7 +10,7 @@ from requests_aws4auth import AWS4Auth
 # Initialize clients
 s3 = boto3.client('s3')
 bedrock_runtime = boto3.client('bedrock-runtime')
-region = os.environ['AWS_REGION']
+region = os.environ['REGION']  # Changed from AWS_REGION to REGION
 
 # OpenSearch configuration
 host = os.environ['OPENSEARCH_ENDPOINT']

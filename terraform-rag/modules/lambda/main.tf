@@ -23,8 +23,8 @@ resource "aws_lambda_function" "lambda_embed" {
   environment {
     variables = {
       OPENSEARCH_ENDPOINT = var.opensearch_endpoint
-      AWS_REGION          = var.region
       EMBEDDINGS_MODEL    = var.embeddings_model
+      REGION              = var.region
     }
   }
 
@@ -48,9 +48,9 @@ resource "aws_lambda_function" "lambda_query" {
   environment {
     variables = {
       OPENSEARCH_ENDPOINT = var.opensearch_endpoint
-      AWS_REGION          = var.region
       EMBEDDINGS_MODEL    = var.embeddings_model
       QUERY_MODEL         = var.query_model
+      REGION              = var.region  # Renamed from AWS_REGION to REGION
     }
   }
 

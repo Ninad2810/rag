@@ -41,10 +41,10 @@ output "lambda_query_name" {
 
 output "embeddings_model" {
   description = "Model used for generating embeddings"
-  value       = var.embeddings_model
+  value       = var.ml_model_conf.embeddings_model
 }
 
 output "query_model" {
   description = "Model used for query processing"
-  value       = var.query_model
+  value       = var.ml_model_conf.query_model
 }

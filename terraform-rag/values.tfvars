@@ -6,13 +6,12 @@ project_name = "RAG System"
 # Common tags
 common_tags = {
   ManagedBy = "Terraform"
-  Owner     = "Data Science Team"
+  Owner     = "Ninad"
   Project   = "RAG System"
 }
 
 # S3 Configuration
 s3_conf = {
-  bucket_name = "rag-documents-bucket"
   bucket_prefix = "rag-document-store"
   s3_notification_prefix = "docs/"
   s3_notification_file_types = [".pdf", ".txt", ".md", ".docx"]
@@ -37,7 +36,6 @@ ml_model_conf = {
 
 # OpenSearch Configuration
 opensearch_conf = {
-  domain_name = "test"
   opensearch_domain_prefix = "rag-vector-store"
   opensearch_instance_type = "t3.medium.search"
   opensearch_instance_count = 1

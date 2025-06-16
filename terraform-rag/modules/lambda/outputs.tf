@@ -18,6 +18,11 @@ output "lambda_query_name" {
   value       = aws_lambda_function.lambda_query.function_name
 }
 
+output "lambda_query_invoke_arn" {
+  description = "Invoke ARN of the Lambda query function"
+  value       = aws_lambda_function.lambda_query.invoke_arn
+}
+
 output "lambda_permission_s3" {
   description = "Lambda permission for S3 to invoke the function"
   value       = aws_lambda_permission.allow_s3

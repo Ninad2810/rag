@@ -1,16 +1,5 @@
-# S3 bucket is now created in the root module
+# S3 bucket is created in the root module
 # This module only handles bucket configuration
-
-# Create S3 bucket first without Lambda dependencies
-resource "aws_s3_bucket" "document_bucket" {
-  bucket = "${var.s3_conf.bucket_prefix}-${var.environment}"
-  
-  tags = merge(var.common_tags, {
-    Name        = "${var.s3_conf.bucket_prefix}-${var.environment}"
-    Environment = var.environment
-    Project     = var.project_name
-  })
-}
 
 resource "aws_s3_bucket_ownership_controls" "document_bucket_ownership" {
   bucket = var.bucket_name
