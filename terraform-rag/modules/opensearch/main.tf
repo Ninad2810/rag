@@ -1,16 +1,16 @@
 resource "aws_opensearch_domain" "vector_store" {
-  domain_name    = var.domain_name
+  domain_name    = var.opensearch_conf.domain_name
   engine_version = "OpenSearch_2.11"
 
   cluster_config {
-    instance_type  = var.instance_type
-    instance_count = var.instance_count
+    instance_type  = var.opensearch_conf.instance_type
+    instance_count = var.opensearch_conf.instance_count
   }
 
   ebs_options {
     ebs_enabled = true
     volume_type = "gp3"
-    volume_size = var.volume_size
+    volume_size = var.opensearch_conf.volume_size
     iops        = 3000
     throughput  = 125
   }
@@ -32,8 +32,8 @@ resource "aws_opensearch_domain" "vector_store" {
     enabled                        = true
     internal_user_database_enabled = true
     master_user_options {
-      master_user_name     = var.master_user_name
-      master_user_password = var.master_user_password
+      master_user_name     = var.opensearch_conf.master_user_name
+      master_user_password = var.opensearch_conf.master_user_password
     }
   }
 
@@ -51,9 +51,9 @@ resource "aws_opensearch_domain" "vector_store" {
     ]
   })
 
-  tags = {
+  tags = merge(var.common_tags, {
     Name        = var.domain_name
     Environment = var.environment
-    Project     = "RAG System"
-  }
+    Project     = var.project_name
+  })
 }

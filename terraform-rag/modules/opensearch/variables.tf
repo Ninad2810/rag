@@ -11,19 +11,19 @@ variable "environment" {
 variable "instance_type" {
   description = "Instance type for OpenSearch nodes"
   type        = string
-  default     = "r6g.large.search"
+  default     = "t3.small.search"
 }
 
 variable "instance_count" {
   description = "Number of OpenSearch nodes"
   type        = number
-  default     = 2
+  default     = 1
 }
 
 variable "volume_size" {
   description = "Size of the EBS volume in GB"
   type        = number
-  default     = 100
+  default     = 10
 }
 
 variable "master_user_name" {
@@ -51,4 +51,16 @@ variable "region" {
 variable "account_id" {
   description = "AWS account ID"
   type        = string
+}
+
+variable "project_name" {
+  description = "Name of the project"
+  type        = string
+  default     = "RAG System"
+}
+
+variable "common_tags" {
+  description = "Common tags to apply to all resources"
+  type        = map(string)
+  default     = {}
 }

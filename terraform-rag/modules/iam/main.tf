@@ -1,6 +1,6 @@
 # Lambda Embed Role
 resource "aws_iam_role" "lambda_embed_role" {
-  name = "lambda-embed-role"
+  name = "lambda-embed-role-${var.environment}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -15,16 +15,16 @@ resource "aws_iam_role" "lambda_embed_role" {
     ]
   })
 
-  tags = {
-    Name        = "lambda-embed-role"
+  tags = merge(var.common_tags, {
+    Name        = "lambda-embed-role-${var.environment}"
     Environment = var.environment
-    Project     = "RAG System"
-  }
+    Project     = var.project_name
+  })
 }
 
 # Lambda Query Role
 resource "aws_iam_role" "lambda_query_role" {
-  name = "lambda-query-role"
+  name = "lambda-query-role-${var.environment}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -39,16 +39,16 @@ resource "aws_iam_role" "lambda_query_role" {
     ]
   })
 
-  tags = {
-    Name        = "lambda-query-role"
+  tags = merge(var.common_tags, {
+    Name        = "lambda-query-role-${var.environment}"
     Environment = var.environment
-    Project     = "RAG System"
-  }
+    Project     = var.project_name
+  })
 }
 
 # Lambda Basic Execution Policy
 resource "aws_iam_policy" "lambda_basic_execution" {
-  name        = "lambda-basic-execution-policy"
+  name        = "lambda-basic-execution-policy-${var.environment}"
   description = "Basic execution policy for Lambda functions"
 
   policy = jsonencode({
@@ -65,11 +65,17 @@ resource "aws_iam_policy" "lambda_basic_execution" {
       }
     ]
   })
+
+  tags = merge(var.common_tags, {
+    Name        = "lambda-basic-execution-policy-${var.environment}"
+    Environment = var.environment
+    Project     = var.project_name
+  })
 }
 
 # S3 Access Policy
 resource "aws_iam_policy" "s3_access" {
-  name        = "s3-access-policy"
+  name        = "s3-access-policy-${var.environment}"
   description = "Policy for accessing S3 buckets"
 
   policy = jsonencode({
@@ -90,11 +96,17 @@ resource "aws_iam_policy" "s3_access" {
       }
     ]
   })
+
+  tags = merge(var.common_tags, {
+    Name        = "s3-access-policy-${var.environment}"
+    Environment = var.environment
+    Project     = var.project_name
+  })
 }
 
 # Bedrock Access Policy
 resource "aws_iam_policy" "bedrock_access" {
-  name        = "bedrock-access-policy"
+  name        = "bedrock-access-policy-${var.environment}"
   description = "Policy for accessing Bedrock models"
 
   policy = jsonencode({
@@ -110,11 +122,17 @@ resource "aws_iam_policy" "bedrock_access" {
       }
     ]
   })
+
+  tags = merge(var.common_tags, {
+    Name        = "bedrock-access-policy-${var.environment}"
+    Environment = var.environment
+    Project     = var.project_name
+  })
 }
 
 # Bedrock Runtime Access Policy
 resource "aws_iam_policy" "bedrock_runtime_access" {
-  name        = "bedrock-runtime-access-policy"
+  name        = "bedrock-runtime-access-policy-${var.environment}"
   description = "Policy for invoking Bedrock runtime models"
 
   policy = jsonencode({
@@ -122,6 +140,7 @@ resource "aws_iam_policy" "bedrock_runtime_access" {
     Statement = [
       {
         Action = [
+          "bedrock:InvokeModel",
           "bedrock-runtime:InvokeModel",
           "bedrock-runtime:InvokeModelWithResponseStream"
         ]
@@ -129,6 +148,40 @@ resource "aws_iam_policy" "bedrock_runtime_access" {
         Resource = "*"
       }
     ]
+  })
+
+  tags = merge(var.common_tags, {
+    Name        = "bedrock-runtime-access-policy-${var.environment}"
+    Environment = var.environment
+    Project     = var.project_name
+  })
+}
+
+# OpenSearch Access Policy
+resource "aws_iam_policy" "opensearch_access" {
+  name        = "opensearch-access-policy-${var.environment}"
+  description = "Policy for accessing OpenSearch"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "es:ESHttpGet",
+          "es:ESHttpPut",
+          "es:ESHttpPost",
+          "es:ESHttpDelete"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      }
+    ]
+  })
+
+  tags = merge(var.common_tags, {
+    Name        = "opensearch-access-policy-${var.environment}"
+    Environment = var.environment
+    Project     = var.project_name
   })
 }
 
@@ -153,6 +206,11 @@ resource "aws_iam_role_policy_attachment" "embed_bedrock_runtime_access" {
   policy_arn = aws_iam_policy.bedrock_runtime_access.arn
 }
 
+resource "aws_iam_role_policy_attachment" "embed_opensearch_access" {
+  role       = aws_iam_role.lambda_embed_role.name
+  policy_arn = aws_iam_policy.opensearch_access.arn
+}
+
 # Attach policies to Lambda Query Role
 resource "aws_iam_role_policy_attachment" "query_basic_execution" {
   role       = aws_iam_role.lambda_query_role.name
@@ -167,4 +225,9 @@ resource "aws_iam_role_policy_attachment" "query_bedrock_access" {
 resource "aws_iam_role_policy_attachment" "query_bedrock_runtime_access" {
   role       = aws_iam_role.lambda_query_role.name
   policy_arn = aws_iam_policy.bedrock_runtime_access.arn
+}
+
+resource "aws_iam_role_policy_attachment" "query_opensearch_access" {
+  role       = aws_iam_role.lambda_query_role.name
+  policy_arn = aws_iam_policy.opensearch_access.arn
 }

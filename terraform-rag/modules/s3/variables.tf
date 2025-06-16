@@ -8,12 +8,20 @@ variable "environment" {
   type        = string
 }
 
-variable "lambda_embed_arn" {
-  description = "ARN of the Lambda function for embedding documents"
+variable "project_name" {
+  description = "Name of the project"
   type        = string
+  default     = "RAG System"
 }
 
-variable "lambda_permission_s3" {
-  description = "Lambda permission for S3 to invoke the function"
-  type        = any
+variable "common_tags" {
+  description = "Common tags to apply to all resources"
+  type        = map(string)
+  default     = {}
+}
+
+variable "bucket_prefix" {
+  description = "Prefix for the S3 bucket name"
+  type        = string
+  default     = "rag-document-store"
 }

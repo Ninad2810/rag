@@ -42,3 +42,57 @@ variable "api_gateway_execution_arn" {
   description = "Execution ARN of the API Gateway"
   type        = string
 }
+
+variable "embeddings_model" {
+  description = "Model to use for generating embeddings"
+  type        = string
+  default     = "amazon.titan-embed-text-v2:0"
+}
+
+variable "query_model" {
+  description = "Model to use for query processing"
+  type        = string
+  default     = "anthropic.claude-3-haiku-20240307-v1:0"
+}
+
+variable "lambda_embed_name" {
+  description = "Name of the Lambda embed function"
+  type        = string
+  default     = "rag-embed"
+}
+
+variable "lambda_query_name" {
+  description = "Name of the Lambda query function"
+  type        = string
+  default     = "rag-query"
+}
+
+variable "lambda_memory_size" {
+  description = "Memory size for Lambda functions in MB"
+  type        = number
+  default     = 1024
+}
+
+variable "lambda_timeout" {
+  description = "Timeout for Lambda functions in seconds"
+  type        = number
+  default     = 300
+}
+
+variable "lambda_runtime" {
+  description = "Runtime for Lambda functions"
+  type        = string
+  default     = "python3.9"
+}
+
+variable "project_name" {
+  description = "Name of the project"
+  type        = string
+  default     = "RAG System"
+}
+
+variable "common_tags" {
+  description = "Common tags to apply to all resources"
+  type        = map(string)
+  default     = {}
+}
